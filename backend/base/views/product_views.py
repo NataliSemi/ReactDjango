@@ -11,7 +11,7 @@ from rest_framework import status
 
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+
 def getProducts(request):
     products = Product.objects.all()
     serializer = ProductSerializer(products, many=True)
