@@ -136,7 +136,10 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+.venv/
+.venv
 
+resources/
 venv/
 config.py
 
