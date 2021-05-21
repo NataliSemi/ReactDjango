@@ -139,6 +139,8 @@ cython_debug/
 .venv/
 .venv
 
+i.txt
+
 resources/
 venv/
 config.py
