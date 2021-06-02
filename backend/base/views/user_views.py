@@ -106,3 +106,15 @@ def updateUser(request, pk):
     serializer = UserSerializer(user, many=False)
 
     return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteUser(request, pk):
+    userForDelete = User.objects.get(id=pk)
+    userForDelete.delete()
+    return Response('User was deleted') 
+
+
+
+
