@@ -22,7 +22,8 @@ def getProducts(request):
 @permission_classes([IsAdminUser])
 def createProduct(request):
     user = request.user
-    product=Product.objects.create(
+
+    product = Product.objects.create(
         user=user,
         name='Sample Name',
         price=0,
@@ -31,8 +32,10 @@ def createProduct(request):
         category='Sample Category',
         description=''
     )
-    serlializer = ProductSerializer(product, many=False)
-    return Response(serlializer.data)
+
+    serializer = ProductSerializer(product, many=False)
+    return Response(serializer.data)
+
 
 
 @api_view(['PUT'])

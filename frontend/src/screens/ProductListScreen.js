@@ -7,7 +7,7 @@ import Message from '../components/Message'
 import { listProducts, deleteProduct, createProduct } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
-function ProductListScreen(history, match) {
+function ProductListScreen({history, match}) {
 
     const dispatch = useDispatch()
 
@@ -18,6 +18,7 @@ function ProductListScreen(history, match) {
     const productDelete = useSelector(state => state.productDelete)
     const { loading:loadingDelete, error:errorDelete, success:successDelete } = productDelete
 
+
     const productCreate = useSelector(state => state.productCreate)
     const { loading: loadingCreate, error: errorCreate, success: successCreate, product: createdProduct } = productCreate
 
@@ -27,7 +28,6 @@ function ProductListScreen(history, match) {
 
 
 
-    let keyword = history.location.search
     useEffect(() => {
         dispatch({ type: PRODUCT_CREATE_RESET })
 
@@ -38,10 +38,11 @@ function ProductListScreen(history, match) {
         if (successCreate) {
             history.push(`/admin/product/${createdProduct.id}/edit`)
         } else {
-            dispatch(listProducts(keyword))
+            dispatch(listProducts())
         }
 
-    }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct, keyword])
+    }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct])
+
 
 
     const deleteHandler = (id) => {
@@ -52,10 +53,8 @@ function ProductListScreen(history, match) {
     }
 
     const createProductHandler = () => {
-        //Create product
         dispatch(createProduct())
     }
-
     return (
         <div>
             <Row className='align-items-center'>
@@ -69,12 +68,13 @@ function ProductListScreen(history, match) {
                 </Col>
             </Row>
 
-            {loadingDelete && <Loader/>}
-            {errorDelete && <Message variant="danger">{errorDelete}</Message>}
+            {loadingDelete && <Loader />}
+            {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
 
 
-            {loadingCreate && <Loader/>}
-            {errorCreate && <Message variant="danger">{errorCreate}</Message>}
+            {loadingCreate && <Loader />}
+            {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
+
 
             {loading
             ? <Loader/>
@@ -96,9 +96,9 @@ function ProductListScreen(history, match) {
                     <tbody>
                         {products.map(product => (
                             <tr key={product.id}>
-                                <td>{product.id}</td>
                                 <td>{product.name}</td>
                                 <td>${product.price}</td>
+                                <td>{product.category}</td>
                                 <td>{product.brand}</td>
 
                                 <td>
