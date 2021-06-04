@@ -99,7 +99,7 @@ def getOrderById(request, pk):
     except:
         return Response({'detail':'Order does not exists'}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view
+@api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateOrderToPaid(request, pk):
     order = Order.objects.get(id=pk)
@@ -109,3 +109,15 @@ def updateOrderToPaid(request, pk):
     order.save()
 
     return Response('Order was paid')
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateOrderToDelivered(request, pk):
+    order = Order.objects.get(id=pk)
+
+    order.isDelivered = True
+    order.deliveredAt = datetime.now()
+    order.save()
+
+    return Response('Order was delivered')
