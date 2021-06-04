@@ -102,7 +102,31 @@ def createProductReview(request, pk):
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     #2 - No Rating or 0
+    elif data['rating'] == 0:
+        content = {'details': 'Please select a rating'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     #3 - Create Review
+    else:
+        review = Review.objects.create(
+            user=user,
+            product=product,
+            name=user.first_name,
+            rating=data['rating'],
+            comment=data['comment'],
+        )
+
+        reviews = product.reviews_set.all()
+        product.numReviews = len(reviews)
+
+        total = 0
+        for i in reviews:
+            total += i.rating
+
+        product.rating = total / len(reviews)
+        product.save()
+
+
+        return Response({'Review Added'})
 
 

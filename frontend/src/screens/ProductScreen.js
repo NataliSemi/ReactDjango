@@ -6,16 +6,28 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { listProductDetails } from '../actions/productActions'
+import { listProductDetails, createProductReview } from '../actions/productActions'
+import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
 
 
 function ProductScreen({ match, history }) {
     const [qty, setQty] = useState(1)
+    const [rating, setRating] = useState(0)
+    const [comment, setComment] = useState('')
 
     const dispatch = useDispatch()
+
     const productDetails = useSelector(state => state.productDetails)
     const { loading, error, product } = productDetails 
 
+    const userLogin = useSelector(state => state.userLogin)
+    const { userInfo } = userLogin 
+
+    const productReviewCreate = useSelector(state => state.productCreate)
+    const { loading: loadingProductReview, 
+        error: errorProductReview, 
+        success: successProductReview 
+    } = productReviewCreate
 
     useEffect(() => {
         dispatch(listProductDetails(match.params.id))
@@ -35,6 +47,7 @@ function ProductScreen({ match, history }) {
                     : error
                         ? <Message variant='danger'>{error}</Message>
                     :(
+                        <div>
                         <Row>
                 <Col md={6}>
                     <Image src={product.image} alt={product.name} fluid/>
@@ -118,8 +131,22 @@ function ProductScreen({ match, history }) {
                     </Card>
                 </Col>
             </Row>
-                    )
-                }
+
+            <Row>
+                <Col md={6}>
+                    <h4>Reviews</h4>
+                    {product.reviews.length === 0 && <Message variant="info">No reviews</Message>}
+                    <ListGroup variant='flush'>
+                        {product.reviews.map((review) => (
+                            
+                        ))}
+
+                    </ListGroup>
+                </Col>
+            </Row>
+            </div>
+            )
+        }
             
         </div>
     )
