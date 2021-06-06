@@ -39,6 +39,14 @@ def getProducts(request):
     return Response({'products':serializer.data, 'page': page, 'pages': paginator.num_pages})
 
 
+@api_view(['GET'])
+def getTopProducts(request):
+    products = Product.objects.filter(rating__gt=4).order_by('-rating')[0:3]
+    serrializer = ProductSerializer(products, many=True)
+    return Response(serrializer.data)
+
+
+
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createProduct(request):
